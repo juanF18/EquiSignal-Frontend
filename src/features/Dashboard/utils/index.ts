@@ -1,0 +1,1 @@
+export { mapStockToCardProps } from './mapStock'
