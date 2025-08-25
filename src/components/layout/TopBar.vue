@@ -1,6 +1,6 @@
 <!-- src/components/Header.vue -->
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +17,9 @@ import {
   Search as SearchIcon,
   ArrowUpDown,
 } from "lucide-vue-next";
+import { useDashboardStore } from "@/features/Dashboard/stores/dashboard.store";
+
+const dashboardStore = useDashboardStore();
 
 const search = ref("");
 const filter = ref<string>("all");
@@ -30,6 +33,12 @@ function handleFilter(value: AcceptableValue) {
   filter.value = typeof value === "string" ? value : "all";
   return filter.value;
 }
+
+// cada vez que cambie el input, lo pasamos al store
+watch(search, (newVal) => {
+  dashboardStore.search = newVal;
+  dashboardStore.getStocks();
+});
 </script>
 
 <template>
