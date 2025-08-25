@@ -7,28 +7,51 @@ export const useDashboardStore = defineStore("dashboard", {
         stocks: [] as Stock[],
         isLoading: false,
         error: null as string | null,
+        page: 1,
+        pageSize: 6,
+        totalPages: 0,
+        totalItems: 0,
     }),
 
-    // --- ACTIONS ---
     actions: {
         async getStocks() {
-            this.isLoading = true;
-            this.error = null;
-
             try {
-                const response = await getStocksService();
-                console.log("Raw response:", response);
+                this.isLoading = true;
+                this.error = null;
+
+                const response = await getStocksService(this.page, this.pageSize);
 
                 if (response.status === 200) {
-                    console.log("Processed response:", response.data);
-                    console.log("Stock data:", response.data.data);
-
                     this.stocks = response.data.data;
+                    this.totalItems = response.data.total;
+                    this.totalPages = response.data.total_pages;
                 }
             } catch (err: any) {
                 this.error = err.message || "Error fetching stocks";
             } finally {
                 this.isLoading = false;
+            }
+        },
+
+        async nextPage() {
+            if (this.page < this.totalPages) {
+                this.page += 1;
+                await this.getStocks();
+            }
+        },
+
+
+        async prevPage() {
+            if (this.page > 1) {
+                this.page -= 1;
+                await this.getStocks();
+            }
+        },
+
+        async goToPage(page: number) {
+            if (page >= 1 && page <= this.totalPages) {
+                this.page = page;
+                await this.getStocks();
             }
         },
     },
