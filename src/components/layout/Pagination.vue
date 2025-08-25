@@ -68,7 +68,11 @@ const visiblePages = computed(() => {
       v-for="p in visiblePages"
       :key="p"
       variant="outline"
-      :class="p === props.page ? 'bg-primary text-primary-foreground' : ''"
+      :class="
+        p === props.page
+          ? 'bg-[#00AF75] text-white shadow-sm hover:bg-[#00AF75]/90'
+          : 'border border-[#00AF75]/30 text-[#00AF75] bg-white hover:bg-[#00AF75]/10'
+      "
       @click="emit('goToPage', p)"
     >
       {{ p }}
