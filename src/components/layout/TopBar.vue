@@ -18,11 +18,13 @@ import {
   ArrowUpDown,
 } from "lucide-vue-next";
 import { useDashboardStore } from "@/features/Dashboard/stores/dashboard.store";
+import { RouterLink, useRoute } from "vue-router";
 
 const dashboardStore = useDashboardStore();
 
 const search = ref("");
 const filter = ref<string>("all");
+const route = useRoute();
 
 function handleSearch(e: Event) {
   const target = e.target as HTMLInputElement;
@@ -55,36 +57,51 @@ watch(search, (newVal) => {
 
         <!-- Navegación -->
         <nav class="flex items-center gap-2">
-          <Button
-            class="rounded-sm px-4 bg-[#00AF75] hover:bg-[#00AF75]/90 text-white shadow-sm"
-          >
-            <Grid2x2 class="mr-2 h-4 w-4" />
-            Dashboard
-          </Button>
+          <!-- Dashboard -->
+          <RouterLink to="/" class="w-full">
+            <Button
+              :class="
+                route.name === 'dashboard'
+                  ? 'bg-[#00AF75] text-white shadow-sm hover:bg-[#00AF75]/90'
+                  : 'border border-[#00AF75]/30 text-[#00AF75] bg-white hover:bg-[#00AF75]/10'
+              "
+              class="rounded-sm px-4 w-full"
+            >
+              <Grid2x2 class="mr-2 h-4 w-4" />
+              Dashboard
+            </Button>
+          </RouterLink>
 
-          <Button
-            variant="outline"
-            class="rounded-sm px-4 border border-[#00AF75]/30 text-[#00AF75] bg-white hover:bg-[#00AF75]/10"
-          >
-            <BarChart3 class="mr-2 h-4 w-4" />
-            Análisis
-          </Button>
+          <!-- Analysis -->
+          <RouterLink to="/analysis" class="w-full">
+            <Button
+              :class="
+                route.name === 'analysis'
+                  ? 'bg-[#00AF75] text-white shadow-sm hover:bg-[#00AF75]/90'
+                  : 'border border-[#00AF75]/30 text-[#00AF75] bg-white hover:bg-[#00AF75]/10'
+              "
+              class="rounded-sm px-4 w-full"
+            >
+              <BarChart3 class="mr-2 h-4 w-4" />
+              Analysis
+            </Button>
+          </RouterLink>
         </nav>
+      </div>
 
-        <!-- Búsqueda (más a la izquierda) -->
-        <div class="relative w-[420px] max-w-full">
-          <SearchIcon
-            class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#71717A]"
-          />
-          <Input
-            type="text"
-            aria-label="Buscar acciones"
-            placeholder="Buscar acciones..."
-            v-model="search"
-            class="pl-9 placeholder:text-[#71717A] w-full"
-            @input="handleSearch"
-          />
-        </div>
+      <!-- Búsqueda (más a la izquierda) -->
+      <div class="relative w-[420px] max-w-full">
+        <SearchIcon
+          class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#71717A]"
+        />
+        <Input
+          type="text"
+          aria-label="Buscar acciones"
+          placeholder="Buscar acciones..."
+          v-model="search"
+          class="pl-9 placeholder:text-[#71717A] w-full"
+          @input="handleSearch"
+        />
       </div>
 
       <!-- DERECHA: Select -->
