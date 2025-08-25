@@ -7,6 +7,7 @@ export const useDashboardStore = defineStore("dashboard", {
         stocks: [] as Stock[],
         isLoading: false,
         error: null as string | null,
+        search: '',
         page: 1,
         pageSize: 6,
         totalPages: 0,
@@ -19,7 +20,11 @@ export const useDashboardStore = defineStore("dashboard", {
                 this.isLoading = true;
                 this.error = null;
 
-                const response = await getStocksService(this.page, this.pageSize);
+                if (this.search.length > 1) {
+                    this.page = 1;
+                }
+
+                const response = await getStocksService(this.page, this.pageSize, this.search);
 
                 if (response.status === 200) {
                     this.stocks = response.data.data;
