@@ -1,0 +1,1 @@
+export { getStocksService } from './useGetStocks'

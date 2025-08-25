@@ -1,8 +1,8 @@
 import { api } from "@/lib/axios";
 import type { StockResponse } from "../types";
 
-export async function getStocksService() {
-    const res = await api.get<StockResponse>("/stocks");
-    return res; // 👈 devuelve el objeto con data, page, etc
+export async function getStocksService(page: number, pageSize: number) {
+    const response = await api.get<StockResponse>(`/stocks?page=${page}&pageSize=${pageSize}`);
+    return response
 }
 

@@ -5,7 +5,7 @@ import DashboardContainer from "@/features/Dashboard/DashboardContainer.vue";
 </script>
 
 <template>
-  <div class="min-h-screen">
+  <div class="h-[86vh]">
     <DashboardContainer />
   </div>
 </template>
