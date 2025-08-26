@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getStocksService } from "../service/useGetStocks";
+import { getStocksService } from "../services/useGetStocks";
 import type { Stock } from "../types";
 
 export const useDashboardStore = defineStore("dashboard", {
