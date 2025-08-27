@@ -1,32 +1,51 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted } from "vue";
 import SectionHeader from "./components/SectionHeader.vue";
 import TabsSection from "./components/TabsSection.vue";
 import TargetsChart from "./components/TargetsChart.vue";
-import { mockData } from "./mocks/Analysis.mock";
-// Si quieres conectarlo al store, cambia aquí:
-const selection = ref<"top5" | "top10">("top5");
-const activeTab = ref("recommendations");
+import { useAnalysisStore } from "./store/analysis.store";
+import type { Tab } from "@/types/ui";
+import GrowthChartWithCards from "./components/GrowthChartWithCards.vue";
 
-const tabs = [
+const analysisStore = useAnalysisStore();
+
+const tabs: Tab[] = [
   {
     value: "recommendations",
     label: "Recomendaciones",
-    content: "📊 Aquí van las recomendaciones",
+    content: () => ({
+      component: TargetsChart,
+      props: { data: analysisStore.recommendations },
+    }),
   },
-  { value: "history", label: "Historial", content: "📈 Aquí va el historial" },
+  {
+    value: "growth",
+    label: "Crecimiento",
+    content: () => ({
+      component: GrowthChartWithCards,
+      props: { data: analysisStore.recommendations },
+    }),
+  },
+  {
+    value: "history",
+    label: "Historial",
+    content:
+      "📈 Aquí encontrarás un registro detallado del historial de recomendaciones y cambios de targets realizados por los analistas en el tiempo.",
+  },
 ];
-// watch(selection, (v) => {
-//   // ejemplo: store.topLimit = v === "top5" ? 5 : 10; store.fetchRecommendations();
-// });
+
+onMounted(async () => {
+  await analysisStore.getRecommendations();
+  console.log("recommendations:", analysisStore.recommendations);
+});
 </script>
 
 <template>
   <div class="p-6">
-    <SectionHeader title="Análisis de Recomendaciones" v-model="selection" />
-
-    <TabsSection v-model="activeTab" :tabs="tabs" />
-
-    <TargetsChart :data="mockData.data" />
+    <SectionHeader
+      title="Análisis de Recomendaciones"
+      v-model="analysisStore.selection"
+    />
+    <TabsSection v-model="analysisStore.activeTab" :tabs="tabs" />
   </div>
 </template>
