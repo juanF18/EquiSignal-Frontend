@@ -1,0 +1,1 @@
+export type { Recommendation, RecommendationsResponse } from './recommendation.type'

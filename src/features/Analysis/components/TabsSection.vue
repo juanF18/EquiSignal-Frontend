@@ -34,11 +34,22 @@ const model = computed({
       v-for="tab in tabs"
       :key="tab.value"
       :value="tab.value"
-      class="mt-4"
+      class="mt-4 flex justify-center items-center"
     >
-      <slot :name="tab.value">
-        {{ tab.content }}
-      </slot>
+      <!-- Caso: string -->
+      <template v-if="typeof tab.content === 'string'">
+        <p class="text-center text-gray-700">{{ tab.content }}</p>
+      </template>
+
+      <!-- Caso: componente -->
+      <template v-else-if="typeof tab.content === 'function'">
+        <div class="w-full">
+          <component
+            :is="tab.content().component"
+            v-bind="tab.content().props"
+          />
+        </div>
+      </template>
     </TabsContent>
   </Tabs>
 </template>
