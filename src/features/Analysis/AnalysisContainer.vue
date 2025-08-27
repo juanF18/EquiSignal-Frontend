@@ -1,15 +1,21 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import SectionHeader from "./components/SectionHeader.vue";
 import TabsSection from "./components/TabsSection.vue";
 import TargetsChart from "./components/TargetsChart.vue";
 import { useAnalysisStore } from "./store/analysis.store";
 import type { Tab } from "@/types/ui";
 import GrowthChartWithCards from "./components/GrowthChartWithCards.vue";
+import AppSpinner from "@/components/layout/AppSpinner.vue";
+import ScoreChart from "./components/ScoreChart.vue";
 
 const analysisStore = useAnalysisStore();
 
-const tabs: Tab[] = [
+onMounted(async () => {
+  await analysisStore.getRecommendations();
+});
+
+const tabs = computed<Tab[]>(() => [
   {
     value: "recommendations",
     label: "Recomendaciones",
@@ -27,17 +33,14 @@ const tabs: Tab[] = [
     }),
   },
   {
-    value: "history",
-    label: "Historial",
-    content:
-      "📈 Aquí encontrarás un registro detallado del historial de recomendaciones y cambios de targets realizados por los analistas en el tiempo.",
+    value: "scores",
+    label: "Puntuaciones",
+    content: () => ({
+      component: ScoreChart,
+      props: { data: analysisStore.recommendations },
+    }),
   },
-];
-
-onMounted(async () => {
-  await analysisStore.getRecommendations();
-  console.log("recommendations:", analysisStore.recommendations);
-});
+]);
 </script>
 
 <template>
@@ -46,6 +49,22 @@ onMounted(async () => {
       title="Análisis de Recomendaciones"
       v-model="analysisStore.selection"
     />
-    <TabsSection v-model="analysisStore.activeTab" :tabs="tabs" />
+    <!-- Spinner (usando el store) -->
+    <AppSpinner
+      v-if="analysisStore.isLoading"
+      position="fullscreen"
+      size="lg"
+    />
+
+    <!-- Error -->
+    <p v-else-if="analysisStore.error" class="text-red-500">
+      {{ analysisStore.error }}
+    </p>
+
+    <TabsSection
+      v-if="!analysisStore.isLoading && analysisStore.recommendations.length"
+      v-model="analysisStore.activeTab"
+      :tabs="tabs"
+    />
   </div>
 </template>
