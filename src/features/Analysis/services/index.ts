@@ -1,0 +1,1 @@
+export { useGetRecommendations } from './useGetRecommendations'

@@ -5,29 +5,28 @@ import {
   Title,
   Tooltip,
   Legend,
-  BarElement,
+  LineElement,
+  PointElement,
   CategoryScale,
   LinearScale,
 } from "chart.js";
-import { Bar } from "vue-chartjs";
+import { Line } from "vue-chartjs";
 import type { Recommendation } from "../types";
 
-// Registramos módulos de Chart.js
 ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  BarElement,
+  LineElement,
+  PointElement,
   CategoryScale,
   LinearScale
 );
 
-// Props con los datos
 const props = defineProps<{
   data: Recommendation[];
 }>();
 
-// Transformamos los datos
 const labels = props.data.map((d) => d.Ticker);
 const fromValues = props.data.map((d) => Number(d.TargetFrom.replace("$", "")));
 const toValues = props.data.map((d) => Number(d.TargetTo.replace("$", "")));
@@ -38,12 +37,17 @@ const chartData = {
     {
       label: "Target From",
       data: fromValues,
+      borderColor: "rgba(0, 175, 117, 0.6)",
       backgroundColor: "rgba(0, 175, 117, 0.6)",
+      tension: 0.4,
     },
     {
       label: "Target To",
       data: toValues,
+      borderColor: "rgba(0, 175, 117, 1)",
       backgroundColor: "rgba(0, 175, 117, 1)",
+      borderDash: [5, 5],
+      tension: 0.4,
     },
   ],
 };
@@ -53,29 +57,23 @@ const chartOptions = {
   plugins: {
     legend: {
       position: "top" as const,
-      labels: {
-        color: "#333",
-      },
+      labels: { color: "#333" },
     },
     title: {
       display: true,
-      text: "Comparación de Targets",
+      text: "Potencial de Crecimiento por Acción",
       color: "#111",
     },
   },
   scales: {
-    x: {
-      ticks: { color: "#555" },
-    },
-    y: {
-      ticks: { color: "#555" },
-    },
+    x: { ticks: { color: "#555" } },
+    y: { ticks: { color: "#555" } },
   },
 };
 </script>
 
 <template>
   <div class="bg-white p-4 rounded-2xl shadow-md">
-    <Bar :data="chartData" :options="chartOptions" />
+    <Line :data="chartData" :options="chartOptions" />
   </div>
 </template>
