@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
+import { defineProps, computed } from "vue";
 import {
   Chart as ChartJS,
   Title,
@@ -27,30 +27,36 @@ const props = defineProps<{
   data: Recommendation[];
 }>();
 
-const labels = props.data.map((d) => d.Ticker);
-const fromValues = props.data.map((d) => Number(d.TargetFrom.replace("$", "")));
-const toValues = props.data.map((d) => Number(d.TargetTo.replace("$", "")));
+// 🔥 Computed para recalcular cuando cambie props.data
+const chartData = computed(() => {
+  const labels = props.data.map((d) => d.Ticker);
+  const fromValues = props.data.map((d) =>
+    Number(d.TargetFrom.replace("$", ""))
+  );
 
-const chartData = {
-  labels,
-  datasets: [
-    {
-      label: "Target From",
-      data: fromValues,
-      borderColor: "rgba(0, 175, 117, 0.6)",
-      backgroundColor: "rgba(0, 175, 117, 0.6)",
-      tension: 0.4,
-    },
-    {
-      label: "Target To",
-      data: toValues,
-      borderColor: "rgba(0, 175, 117, 1)",
-      backgroundColor: "rgba(0, 175, 117, 1)",
-      borderDash: [5, 5],
-      tension: 0.4,
-    },
-  ],
-};
+  const toValues = props.data.map((d) => Number(d.TargetTo.replace("$", "")));
+
+  return {
+    labels,
+    datasets: [
+      {
+        label: "Target From",
+        data: fromValues,
+        borderColor: "rgba(0, 175, 117, 0.6)",
+        backgroundColor: "rgba(0, 175, 117, 0.6)",
+        tension: 0.4,
+      },
+      {
+        label: "Target To",
+        data: toValues,
+        borderColor: "rgba(0, 175, 117, 1)",
+        backgroundColor: "rgba(0, 175, 117, 1)",
+        borderDash: [5, 5],
+        tension: 0.4,
+      },
+    ],
+  };
+});
 
 const chartOptions = {
   responsive: true,

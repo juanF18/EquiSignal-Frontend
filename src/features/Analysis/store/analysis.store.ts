@@ -11,6 +11,15 @@ export const useAnalysisStore = defineStore("analysis", {
         selection: "top5" as "top5" | "top10",
         activeTab: "recommendations" as "recommendations" | "history",
     }),
+    getters: {
+        filteredRecommendations: (state) => {
+            if (!state.recommendations.length) return [];
+
+            return state.selection === "top5"
+                ? state.recommendations.slice(0, 5)
+                : state.recommendations.slice(0, 10);
+        },
+    },
     actions: {
         setSelection(value: "top5" | "top10") {
             this.selection = value;

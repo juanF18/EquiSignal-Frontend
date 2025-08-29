@@ -21,7 +21,7 @@ const tabs = computed<Tab[]>(() => [
     label: "Recomendaciones",
     content: () => ({
       component: TargetsChart,
-      props: { data: analysisStore.recommendations },
+      props: { data: analysisStore.filteredRecommendations },
     }),
   },
   {
@@ -29,7 +29,7 @@ const tabs = computed<Tab[]>(() => [
     label: "Crecimiento",
     content: () => ({
       component: GrowthChartWithCards,
-      props: { data: analysisStore.recommendations },
+      props: { data: analysisStore.filteredRecommendations },
     }),
   },
   {
@@ -37,7 +37,7 @@ const tabs = computed<Tab[]>(() => [
     label: "Puntuaciones",
     content: () => ({
       component: ScoreChart,
-      props: { data: analysisStore.recommendations },
+      props: { data: analysisStore.filteredRecommendations },
     }),
   },
 ]);

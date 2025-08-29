@@ -1,28 +1,28 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useAnalysisStore } from "../store/analysis.store";
 
 type TopPick = "top5" | "top10";
 
 interface Props {
   title: string;
-  modelValue?: TopPick;
 }
 
 const props = defineProps<Props>();
-const emit = defineEmits<{ (e: "update:modelValue", v: TopPick): void }>();
+const analysisStore = useAnalysisStore();
 
-// Proxy para v-model (lee del prop y emite al padre)
+// Proxy con el store directamente
 const model = computed<TopPick>({
-  get: () => props.modelValue ?? "top5",
-  set: (v) => emit("update:modelValue", v),
+  get: () => analysisStore.selection,
+  set: (v) => analysisStore.setSelection(v),
 });
 </script>
 
 <template>
   <div class="flex items-center justify-between w-full border-b pb-3 mb-4">
     <h2 class="text-2xl font-bold tracking-tight text-[#00AF75]">
-      {{ title }}
+      {{ props.title }}
     </h2>
 
     <ToggleGroup type="single" v-model="model" class="flex gap-0">
