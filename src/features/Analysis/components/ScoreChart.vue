@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
+import { defineProps, computed } from "vue";
 import {
   Chart as ChartJS,
   Title,
@@ -27,25 +27,27 @@ const props = defineProps<{
   data: Recommendation[];
 }>();
 
-// Transformación de datos
-const labels = props.data.map((d) => d.Ticker);
-const scores = props.data.map((d) => d.Score);
+// 🔥 Computed reactivo
+const chartData = computed(() => {
+  const labels = props.data.map((d) => d.Ticker);
+  const scores = props.data.map((d) => d.Score);
+
+  return {
+    labels,
+    datasets: [
+      {
+        label: "Puntuación",
+        data: scores,
+        backgroundColor: "rgba(0, 175, 117, 0.7)", // verde principal con transparencia
+        borderColor: "#00AF75", // borde sólido verde
+        borderWidth: 2,
+        borderRadius: 8,
+      },
+    ],
+  };
+});
 
 // Configuración del gráfico
-const chartData = {
-  labels,
-  datasets: [
-    {
-      label: "Puntuación",
-      data: scores,
-      backgroundColor: "rgba(0, 175, 117, 0.7)", // verde principal con transparencia
-      borderColor: "#00AF75", // borde sólido verde
-      borderWidth: 2,
-      borderRadius: 8,
-    },
-  ],
-};
-
 const chartOptions = {
   responsive: true,
   plugins: {

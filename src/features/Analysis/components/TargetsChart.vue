@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
+import { defineProps, computed } from "vue";
 import {
   Chart as ChartJS,
   Title,
@@ -22,31 +22,34 @@ ChartJS.register(
   LinearScale
 );
 
-// Props con los datos
 const props = defineProps<{
   data: Recommendation[];
 }>();
 
-// Transformamos los datos
-const labels = props.data.map((d) => d.Ticker);
-const fromValues = props.data.map((d) => Number(d.TargetFrom.replace("$", "")));
-const toValues = props.data.map((d) => Number(d.TargetTo.replace("$", "")));
+// 🔥 Computed para que se actualice en cada cambio
+const chartData = computed(() => {
+  const labels = props.data.map((d) => d.Ticker);
+  const fromValues = props.data.map((d) =>
+    Number(d.TargetFrom.replace("$", ""))
+  );
+  const toValues = props.data.map((d) => Number(d.TargetTo.replace("$", "")));
 
-const chartData = {
-  labels,
-  datasets: [
-    {
-      label: "Target From",
-      data: fromValues,
-      backgroundColor: "rgba(0, 175, 117, 0.6)",
-    },
-    {
-      label: "Target To",
-      data: toValues,
-      backgroundColor: "rgba(0, 175, 117, 1)",
-    },
-  ],
-};
+  return {
+    labels,
+    datasets: [
+      {
+        label: "Target From",
+        data: fromValues,
+        backgroundColor: "rgba(0, 175, 117, 0.6)",
+      },
+      {
+        label: "Target To",
+        data: toValues,
+        backgroundColor: "rgba(0, 175, 117, 1)",
+      },
+    ],
+  };
+});
 
 const chartOptions = {
   responsive: true,
@@ -76,6 +79,7 @@ const chartOptions = {
 
 <template>
   <div class="bg-white p-4 rounded-2xl shadow-md">
+    <!-- pasamos el computed con .value -->
     <Bar :data="chartData" :options="chartOptions" class="max-h-[50vh]" />
   </div>
 </template>
