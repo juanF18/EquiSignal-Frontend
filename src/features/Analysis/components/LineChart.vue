@@ -74,6 +74,6 @@ const chartOptions = {
 
 <template>
   <div class="bg-white p-4 rounded-2xl shadow-md">
-    <Line :data="chartData" :options="chartOptions" />
+    <Line :data="chartData" :options="chartOptions" class="max-h-[50vh]" />
   </div>
 </template>
