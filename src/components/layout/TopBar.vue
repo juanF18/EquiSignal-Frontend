@@ -1,4 +1,3 @@
-<!-- src/components/Header.vue -->
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { Input } from "@/components/ui/input";
@@ -19,12 +18,15 @@ import {
 } from "lucide-vue-next";
 import { useDashboardStore } from "@/features/Dashboard/stores/dashboard.store";
 import { RouterLink, useRoute } from "vue-router";
+import { useDebounce } from "@/composables/useDebounce";
 
 const dashboardStore = useDashboardStore();
 
 const search = ref("");
 const filter = ref<string>("all");
 const route = useRoute();
+
+const debouncedSearch = useDebounce(search, 500);
 
 function handleSearch(e: Event) {
   const target = e.target as HTMLInputElement;
@@ -36,10 +38,11 @@ function handleFilter(value: AcceptableValue) {
   return filter.value;
 }
 
-// cada vez que cambie el input, lo pasamos al store
-watch(search, (newVal) => {
-  dashboardStore.search = newVal;
-  dashboardStore.getStocks();
+watch(debouncedSearch, (newVal) => {
+  if (newVal.length >= 2) {
+    dashboardStore.search = newVal;
+    dashboardStore.getStocks();
+  }
 });
 </script>
 
