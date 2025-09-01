@@ -10,7 +10,6 @@ const dashboardStore = useDashboardStore();
 
 onMounted(async () => {
   await dashboardStore.getStocks();
-  console.log(dashboardStore.stocks);
 });
 
 const handlePrev = () => dashboardStore.prevPage();

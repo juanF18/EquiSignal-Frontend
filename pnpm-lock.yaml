@@ -57,6 +57,9 @@ importers:
         specifier: ^4.5.1
         version: 4.5.1(vue@3.5.19(typescript@5.8.3))
     devDependencies:
+      '@pinia/testing':
+        specifier: ^1.0.2
+        version: 1.0.2(pinia@3.0.3(typescript@5.8.3)(vue@3.5.19(typescript@5.8.3)))
       '@types/node':
         specifier: ^24.3.0
         version: 24.3.0
@@ -338,6 +341,11 @@ packages:
 
   '@one-ini/wasm@0.1.1':
     resolution: {integrity: sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==}
+
+  '@pinia/testing@1.0.2':
+    resolution: {integrity: sha512-yZVXJTKh677J0AT8kOPxGk5s1v7hMQIDT3tmeriwtR5LDu41DvXTEBQf0ql9SsHW1mCSDG38QDFzSSl5ucJqnQ==}
+    peerDependencies:
+      pinia: '>=3.0.3'
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -1760,6 +1768,10 @@ snapshots:
   '@kurkle/color@0.3.4': {}
 
   '@one-ini/wasm@0.1.1': {}
+
+  '@pinia/testing@1.0.2(pinia@3.0.3(typescript@5.8.3)(vue@3.5.19(typescript@5.8.3)))':
+    dependencies:
+      pinia: 3.0.3(typescript@5.8.3)(vue@3.5.19(typescript@5.8.3))
 
   '@pkgjs/parseargs@0.11.0':
     optional: true

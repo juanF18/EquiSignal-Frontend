@@ -3,7 +3,7 @@ import { computed } from "vue";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useAnalysisStore } from "../store/analysis.store";
 
-type TopPick = "top5" | "top10";
+export type TopPick = "top5" | "top10";
 
 interface Props {
   title: string;
